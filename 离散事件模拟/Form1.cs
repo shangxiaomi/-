@@ -41,6 +41,7 @@ namespace 离散事件模拟
             }
             Simulation op = new Simulation();
             op.text = textBox4;
+            op.data = dataGridView1;
             op.CloseTime = temp;
 
 
@@ -56,14 +57,7 @@ namespace 离散事件模拟
 
         private void button2_Click(object sender, EventArgs e)
         {
-            number_staff = int.Parse(textBox1.Text);
-            textBox1.Hide();
-            button2.Hide();
-            textBox2.Visible = true;
-            textBox3.Visible = true;
-            button3.Visible = true;
-            label3.Visible = true;
-            label3.Text = "第" + number_staff.ToString() + "个人";
+            
         }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
@@ -88,6 +82,7 @@ namespace 离散事件模拟
     }
     public class Simulation
     {
+        public DataGridView data = null; 
         int Number_event;
         public  TextBox text = null;
         Random rd = new Random();
@@ -104,6 +99,67 @@ namespace 离散事件模拟
         MyLinkQueue<CustomerNode>[] QStaff1 = null;//三个级别的理发师队列
         MyLinkQueue<CustomerNode>[] QStaff2 = null;
         MyLinkQueue<CustomerNode>[] QStaff3 = null;
+        private void Update()
+        { 
+            int cnt = 0;
+            int len=0;
+            for (int i = 1; i <= 3; i++)
+            {
+                for (int j = 0; j < Number_Staff[i]; j++)
+                {
+                    if (i == 1)
+                    {
+                        len = QStaff1[j].Size;
+                        if (len > 0) data.Rows[cnt].Cells[2].Value = QStaff1[j].First().Number.ToString();
+                        else data.Rows[cnt].Cells[2].Value = "空";
+                    }
+                    else if (i == 2)
+                    {
+                        len = QStaff2[j].Size;
+                        if (len > 0) data.Rows[cnt].Cells[2].Value = QStaff2[j].First().Number.ToString();
+                        else data.Rows[cnt].Cells[2].Value = "空";
+                    }
+                    else if (i == 3)
+                    {
+                        len = QStaff3[j].Size;
+                        if (len > 0) data.Rows[cnt].Cells[2].Value = QStaff3[j].First().Number.ToString();
+                        else data.Rows[cnt].Cells[2].Value = "空";
+                    }
+                    if (len > 1) data.Rows[cnt].Cells[3].Value = len.ToString();
+                    else data.Rows[cnt].Cells[3].Value = "0";
+                    cnt++;
+                }
+                
+                
+            }
+            
+        }
+        private void Delete()
+        {
+            int cnt = data.RowCount;
+            for(int i=cnt-2;i>=0;i--)
+            {
+                data.Rows.Remove(data.Rows[i]);
+            }
+            
+        }
+        private void Initial_Date()
+        {
+            Delete();
+            int cnt = 0;
+            for(int i=1;i<=3;i++)
+            {
+                for(int j=0;j<Number_Staff[i];j++)
+                {
+                    data.Rows.Add();
+                    data.Rows[cnt].Height = 20;
+                    data.Rows[cnt].Cells[0].Value = (cnt+1).ToString();
+                    data.Rows[cnt].Cells[1].Value = i.ToString();
+                    data.Rows[cnt].Cells[2].Value = "空";
+                    cnt++;
+                }
+            }
+        }
         public int First(Event item)
         {
             int cur = 0;
@@ -120,7 +176,7 @@ namespace 离散事件模拟
         }
         public void CustomerArrived()
         {
-            en.Grade = rd.Next(1, 3);
+            en.Grade = rd.Next(1, 4);
             Number_Customer[en.Grade]++;
             ++CustomerNum; //增加客户数量
             en.Number = CustomerNum;
@@ -147,12 +203,13 @@ namespace 离散事件模拟
                 QStaff3[i].EnQueue(cn);
             }
             //
+           
             text.Text+="有新客户！！" + "编号"+en.Number+" "+en.OccurTime.ToString() + " 逗留时间 " + durTime.ToString() + " 级别" + en.Grade.ToString() + " 第几位" + i.ToString()+"\r\n";
             Thread.Sleep(100);
             //把当前客户离开事件，加入事件列表
             en.OccurTime = depT;
             en.NType = i;
-            en.dur = durTime;
+            en.dur= durTime;
 
             int cur = First(en);
             ev.Insert(cur, en);//还没有实现自动按顺序插入！！！！！
@@ -190,6 +247,7 @@ namespace 离散事件模拟
         }
         public void OpenDay()
         {
+            
             Number_event = 0;
             for (int i = 1; i < 4; i++)
             {
@@ -203,18 +261,19 @@ namespace 离散事件模拟
             en.NType = 0;
             ev.Add(en);
             Number_Staff[1] = Number_Staff[2] = Number_Staff[3] = 3;//测试用
+            Initial_Date();
             QStaff1 = new MyLinkQueue<CustomerNode>[Number_Staff[1]];
             for (int i = 0; i < Number_Staff[1]; i++)
             {
                 QStaff1[i] = new MyLinkQueue<CustomerNode>();
             }
             QStaff2 = new MyLinkQueue<CustomerNode>[Number_Staff[2]];
-            for (int i = 0; i < Number_Staff[1]; i++)
+            for (int i = 0; i < Number_Staff[2]; i++)
             {
                 QStaff2[i] = new MyLinkQueue<CustomerNode>();
             }
             QStaff3 = new MyLinkQueue<CustomerNode>[Number_Staff[3]];
-            for (int i = 0; i < Number_Staff[1]; i++)
+            for (int i = 0; i < Number_Staff[3]; i++)
             {
                 QStaff3[i] = new MyLinkQueue<CustomerNode>();
             }
@@ -273,6 +332,7 @@ namespace 离散事件模拟
                 if (en.Grade == 0)
                 {
                     CustomerArrived();
+                    Update();
                 }
                 else
                 {
@@ -280,6 +340,7 @@ namespace 离散事件模拟
                     text.Text+="客户离开 级别" +"编号" + en.Number + " " + en.Grade.ToString() + "  此级别的第几位" + en.NType.ToString() + " " + en.OccurTime.ToString()+"\r\n";
                     Thread.Sleep(300);
                     CustomerDepature();
+                    Update();
                 }
             }
 
@@ -288,7 +349,7 @@ namespace 离散事件模拟
         {
             Thread th = new Thread(new ThreadStart(barber_simulation));//创建线程对象
             th.Start();//启动线程
-            th.Abort();
+            //th.Abort();
             
         }
     }

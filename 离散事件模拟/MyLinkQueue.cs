@@ -44,7 +44,21 @@ namespace DataStructure.Queue
         /// <summary>
         /// 入队操作
         /// </summary>
+        /// <param name="node">首元素</param>
+        public T First()
+        {
+            if (IsEmpty())
+            {
+                return default(T);
+            }
+            return head.Item;
+        }
+       
+        /// <summary>
+        /// 入队操作
+        /// </summary>
         /// <param name="node">节点元素</param>
+
         public void EnQueue(T item)
         {
             Node<T> oldLastNode = tail;
