@@ -289,7 +289,7 @@ namespace 离散事件模拟
             Thread th = new Thread(new ThreadStart(barber_simulation));//创建线程对象
             th.Start();//启动线程
             th.Abort();
-
+            
         }
     }
 }
