@@ -24,7 +24,6 @@ namespace 离散事件模拟
         {
             
         }
-        
         private void button1_Click(object sender, EventArgs e)
         {
             if (comboBox1.Text.Equals(string.Empty) || comboBox2.Text.Equals(string.Empty) || comboBox3.Text.Equals(string.Empty) || comboBox4.Text.Equals(string.Empty) || comboBox5.Text.Equals(string.Empty) || comboBox6.Text.Equals(string.Empty))
@@ -40,6 +39,7 @@ namespace 离散事件模拟
                 MessageBox.Show("时间设置的不对哦"); return;
             }
             Simulation op = new Simulation();
+            op.StartTime = Start;
             op.text = textBox4;
             op.data = dataGridView1;
             op.CloseTime = temp;
@@ -66,6 +66,7 @@ namespace 离散事件模拟
         }
     }
     //自己写的相关操作
+    #region//时间节点（结构体）
     public struct Event
     {
         public int OccurTime;
@@ -74,14 +75,20 @@ namespace 离散事件模拟
         public int Grade;
         public int Number;
     }
+    #endregion
+    #region//顾客节点（结构体）
     struct CustomerNode
     {
         public int OccurTime;
         public int Duration;
         public int Number;
     }
+    #endregion
+    #region//理发店模拟类
     public class Simulation
     {
+        #region//相关字段
+        public DateTime StartTime;
         public DataGridView data = null; 
         int Number_event;
         public  TextBox text = null;
@@ -99,6 +106,8 @@ namespace 离散事件模拟
         MyLinkQueue<CustomerNode>[] QStaff1 = null;//三个级别的理发师队列
         MyLinkQueue<CustomerNode>[] QStaff2 = null;
         MyLinkQueue<CustomerNode>[] QStaff3 = null;
+        #endregion
+        #region//更新理发师工作状态函数
         private void Update()
         { 
             int cnt = 0;
@@ -134,6 +143,8 @@ namespace 离散事件模拟
             }
             
         }
+        #endregion
+        #region//初始化理发师工作状态表的相关操作
         private void Delete()
         {
             int cnt = data.RowCount;
@@ -143,7 +154,7 @@ namespace 离散事件模拟
             }
             
         }
-        private void Initial_Date()
+        private void Initial_Data()
         {
             Delete();
             int cnt = 0;
@@ -160,6 +171,7 @@ namespace 离散事件模拟
                 }
             }
         }
+        #endregion
         public int First(Event item)
         {
             int cur = 0;
@@ -174,6 +186,7 @@ namespace 离散事件模拟
             }
             return cur;
         }
+        #region//顾客到达和离开
         public void CustomerArrived()
         {
             en.Grade = rd.Next(1, 4);
@@ -203,8 +216,8 @@ namespace 离散事件模拟
                 QStaff3[i].EnQueue(cn);
             }
             //
-           
-            text.Text+="有新客户！！" + "编号"+en.Number+" "+en.OccurTime.ToString() + " 逗留时间 " + durTime.ToString() + " 级别" + en.Grade.ToString() + " 第几位" + i.ToString()+"\r\n";
+            text.Text = "第" + (++Number_event).ToString() + "个事件 " + "有新客户！  时间" + StartTime.AddSeconds(en.OccurTime).ToLongTimeString().ToString()  + "第" + en.Number + "号顾客将由 " + en.Grade.ToString() + " 级别的第" + (en.NType+1).ToString() + " 位理发师进行服务\r\n" + text.Text;
+            //text.Text= "第" + (++Number_event).ToString() + "个事件 "+"有新客户！" + " 编号"+en.Number+" "+StartTime.AddSeconds(en.OccurTime).ToLongTimeString() + " 逗留时间 " + durTime.ToString() + " 级别" + en.Grade.ToString() + " 第几位" + i.ToString()+"\r\n"+text.Text;
             Thread.Sleep(100);
             //把当前客户离开事件，加入事件列表
             en.OccurTime = depT;
@@ -245,6 +258,7 @@ namespace 离散事件模拟
             }
             TotalTime += temp.Duration;
         }
+        #endregion
         public void OpenDay()
         {
             
@@ -261,7 +275,7 @@ namespace 离散事件模拟
             en.NType = 0;
             ev.Add(en);
             Number_Staff[1] = Number_Staff[2] = Number_Staff[3] = 3;//测试用
-            Initial_Date();
+            Initial_Data();
             QStaff1 = new MyLinkQueue<CustomerNode>[Number_Staff[1]];
             for (int i = 0; i < Number_Staff[1]; i++)
             {
@@ -327,7 +341,6 @@ namespace 离散事件模拟
             while (ev.Count != 0)
             {
                 en = ev[0];
-                text.Text += "第" + (++Number_event).ToString() + "个事件 ";
                 ev.RemoveAt(0);
                 if (en.Grade == 0)
                 {
@@ -336,8 +349,8 @@ namespace 离散事件模拟
                 }
                 else
                 {
-                    
-                    text.Text+="客户离开 级别" +"编号" + en.Number + " " + en.Grade.ToString() + "  此级别的第几位" + en.NType.ToString() + " " + en.OccurTime.ToString()+"\r\n";
+                    text.Text = "第" + (++Number_event).ToString() + "个事件 " + "客户离开  时间" + StartTime.AddSeconds(en.OccurTime).ToLongTimeString().ToString() + "第 " + en.Number + " 号顾客由 " + en.Grade.ToString() + " 级别的第 " + (en.NType+1).ToString() + " 位理发师完成服务\r\n" + text.Text;
+                    //text.Text= "第" + (++Number_event).ToString() + "个事件 "+"客户离开  级别" +"编号" + en.Number + " " + en.Grade.ToString() + "  此级别的第几位" + en.NType.ToString() + " " + StartTime.AddSeconds(en.OccurTime).ToLongTimeString().ToString() + "\r\n"+text.Text;
                     Thread.Sleep(300);
                     CustomerDepature();
                     Update();
@@ -353,4 +366,5 @@ namespace 离散事件模拟
             
         }
     }
+    #endregion
 }
