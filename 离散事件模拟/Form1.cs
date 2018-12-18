@@ -88,6 +88,7 @@ namespace 离散事件模拟
     public class Simulation
     {
         #region//相关字段
+        Thread th = null;
         public DateTime StartTime;
         public DataGridView data = null; 
         int Number_event;
@@ -218,7 +219,6 @@ namespace 离散事件模拟
             //
             text.Text = "第" + (++Number_event).ToString() + "个事件 " + "有新客户！  时间" + StartTime.AddSeconds(en.OccurTime).ToLongTimeString().ToString()  + "第" + en.Number + "号顾客将由 " + en.Grade.ToString() + " 级别的第" + (en.NType+1).ToString() + " 位理发师进行服务\r\n" + text.Text;
             //text.Text= "第" + (++Number_event).ToString() + "个事件 "+"有新客户！" + " 编号"+en.Number+" "+StartTime.AddSeconds(en.OccurTime).ToLongTimeString() + " 逗留时间 " + durTime.ToString() + " 级别" + en.Grade.ToString() + " 第几位" + i.ToString()+"\r\n"+text.Text;
-            Thread.Sleep(100);
             //把当前客户离开事件，加入事件列表
             en.OccurTime = depT;
             en.NType = i;
@@ -333,7 +333,6 @@ namespace 离散事件模拟
             }
             return cur;
         }
-
         public void barber_simulation()
         {
             
@@ -346,23 +345,24 @@ namespace 离散事件模拟
                 {
                     CustomerArrived();
                     Update();
+                    Thread.Sleep(4000);
                 }
                 else
                 {
                     text.Text = "第" + (++Number_event).ToString() + "个事件 " + "客户离开  时间" + StartTime.AddSeconds(en.OccurTime).ToLongTimeString().ToString() + "第 " + en.Number + " 号顾客由 " + en.Grade.ToString() + " 级别的第 " + (en.NType+1).ToString() + " 位理发师完成服务\r\n" + text.Text;
-                    //text.Text= "第" + (++Number_event).ToString() + "个事件 "+"客户离开  级别" +"编号" + en.Number + " " + en.Grade.ToString() + "  此级别的第几位" + en.NType.ToString() + " " + StartTime.AddSeconds(en.OccurTime).ToLongTimeString().ToString() + "\r\n"+text.Text;
-                    Thread.Sleep(300);
+                    //text.Text= "第" + (++Number_event).ToString() + "个事件 "+"客户离开  级别" +"编号" + en.Number + " " + en.Grade.ToString() + "  此级别的第几位" + en.NType.ToString() + " " + StartTime.AddSeconds(en.OccurTime).ToLongTimeString().ToString() + "\r\n"+text.Text;                   
                     CustomerDepature();
                     Update();
+                    Thread.Sleep(4000);
                 }
             }
+            th.Abort();
 
         }
         public void kaishi()
         {
-            Thread th = new Thread(new ThreadStart(barber_simulation));//创建线程对象
+            th= new Thread(new ThreadStart(barber_simulation));//创建线程对象
             th.Start();//启动线程
-            //th.Abort();
             
         }
     }
