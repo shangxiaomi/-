@@ -114,6 +114,7 @@ namespace 离散事件模拟
             op.guandian = button2;
             op.data = dataGridView1;
             op.CloseTime = temp;
+            this.Text = "理发馆仿真模拟系统--营业中";
             op.kaishi();
             
         }
@@ -143,6 +144,7 @@ namespace 离散事件模拟
             textBox11.ReadOnly = false;
             textBox12.ReadOnly = false;
             textBox13.ReadOnly = false;
+            this.Text = "理发馆仿真模拟系统";
             button1.Show();
             /*comboBox1.DropDownStyle = ComboBoxStyle.DropDown;
             comboBox2.DropDownStyle = ComboBoxStyle.DropDown;
@@ -171,9 +173,15 @@ namespace 离散事件模拟
 		{
 
 		}
-	}
-	#region//时间节点（结构体）
-	public struct Event
+
+        private void 软件信息ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form2 xinxi = new Form2();
+            xinxi.ShowDialog();
+        }
+    }
+    #region//时间节点（结构体）
+    public struct Event
 	{
 		public int OccurTime;//事件发生时间
 		public int NType;//第几位理发师
