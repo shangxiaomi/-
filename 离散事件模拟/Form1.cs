@@ -504,6 +504,7 @@ namespace 离散事件模拟
 				}
 			}
 			guandian.Show();
+            MessageBox.Show("营业结束，点击关店按钮查看相关信息");
 			th.Abort();
 		}
 		public void kaishi()
