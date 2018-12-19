@@ -179,6 +179,19 @@ namespace 离散事件模拟
             Form2 xinxi = new Form2();
             xinxi.ShowDialog();
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void 事件发生间隔设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form3 t = new Form3();
+            t.label2.Text ="当前时间间隔为 "+op.Jiange.ToString() + "毫秒";
+            t.ShowDialog();
+            if (t.DialogResult == DialogResult.OK) op.Jiange=int.Parse(t.textBox1.Text);
+        }
     }
     #region//时间节点（结构体）
     public struct Event
@@ -201,7 +214,8 @@ namespace 离散事件模拟
 	#region//理发店模拟类
 	public class Simulation
 	{
-		#region//相关字段
+        #region//相关字段
+        public int Jiange = 100;
 		public TextBox onecustumer = null;
 		public TextBox twocustumer = null;
 		public TextBox threecustumer = null;
@@ -476,7 +490,7 @@ namespace 离散事件模拟
 				{
 					CustomerArrived();
 					Update();
-					Thread.Sleep(100);
+					Thread.Sleep(Jiange);
 				}
 				else
 				{
@@ -485,7 +499,7 @@ namespace 离散事件模拟
 					//text.Text= "第" + (++Number_event).ToString() + "个事件 "+"客户离开  级别" +"编号" + en.Number + " " + en.Grade.ToString() + "  此级别的第几位" + en.NType.ToString() + " " + StartTime.AddSeconds(en.OccurTime).ToLongTimeString().ToString() + "\r\n"+text.Text;                   
 					CustomerDepature();
 					Update();
-					Thread.Sleep(100);
+					Thread.Sleep(Jiange);
 				}
 			}
 			guandian.Show();
@@ -499,6 +513,3 @@ namespace 离散事件模拟
 	}
 	#endregion
 }
-
-
-
