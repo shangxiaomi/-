@@ -414,6 +414,7 @@ namespace 离散事件模拟
 			en.OccurTime = 0;  //设置第一个客户到达事件
 			en.NType = 0;
 			ev.Add(en);
+            text.Text = "";
 			onecustumer.Text = (Number_Customer[1]).ToString();
 			twocustumer.Text = (Number_Customer[2]).ToString();
 			threecustumer.Text = (Number_Customer[3]).ToString();
