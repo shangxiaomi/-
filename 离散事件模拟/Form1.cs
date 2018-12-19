@@ -153,47 +153,47 @@ namespace 离散事件模拟
     #region//时间节点（结构体）
     public struct Event
     {
-        public int OccurTime;
-        public int NType;
-        public int dur;
-        public int Grade;
-        public int Number;
+        public int OccurTime;//事件发生时间
+        public int NType;//第几位理发师
+        public int dur;//逗留时间
+        public int Grade;//理发师级别
+        public int Number;//顾客编号
     }
     #endregion
     #region//顾客节点（结构体）
     struct CustomerNode
     {
-        public int OccurTime;
-        public int Duration;
-        public int Number;
+        public int OccurTime;//顾客的离开时间，到达时间就是离开时间减去逗留时间
+        public int Duration;//逗留时间
+        public int Number;//顾客编号
     }
     #endregion
     #region//理发店模拟类
     public class Simulation
     {
         #region//相关字段
-        public DateTime FactEnd;
-        public TextBox text1 = null;
-        public TextBox text2 = null;
-        public TextBox text = null;
-        public TextBox text3 = null;
-        public TextBox text4 = null;
-        public TextBox text5 = null;
-        public Button guandian = null;
-        Thread th = null;
-        public DateTime StartTime;
-        public DataGridView data = null;
-        int Number_event;
-        Random rd = new Random();
+        public DateTime FactEnd;//实际关店时间（DateTime类）
+        public DateTime StartTime;//开店时间（DateTIme类） 
+        public TextBox text1 = null;//Form1中的textBox5文本框（在From中赋值）,用于显示平均逗留时间
+        public TextBox text2 = null;//Form1中的textBox6文本框（在From中赋值）,用于显示当前收入
+        public TextBox text = null;//Form1中的事件显示文本框（在From中赋值）
+        public TextBox text3 = null;//用于读入各个级别理发师的人数
+        public TextBox text4 = null;//用于读入各个级别理发师的人数
+        public TextBox text5 = null;//用于读入各个级别理发师的人数
+        public Button guandian = null;//Form1中的关店按钮（在Form1中赋值），用于在营业结束后显示关店按钮
+        public DataGridView data = null;//Form1中的表格空间（在Form1中赋值）,用于显示各个理发师的工作状态
+        Thread th = null;//线程
+        int Number_event;//事件的编号
+        Random rd = new Random();//用于生成随机数
         MySingleLinkedList<Event> ev;//事件链表
-        int TotalTime;
-        public int CustomerNum;
-        public int CloseTime;
+        int TotalTime;//顾客逗留总时间
+        public int CustomerNum;//顾客总数目
+        public int CloseTime;//营业时间（关店时间减去开店时间）（在Form1中设置）
         Event en = new Event();//事件节点
-        CustomerNode cn = new CustomerNode();
-        int[] Number_Customer = new int[4];//三个级别的顾客各有多少
+        CustomerNode cn = new CustomerNode();//顾客节点
+        int[] Number_Customer = new int[4];//三个级别的已经结账顾客各有多少
         int[] Number_Staff = new int[4];//三个级别的理发师各多少人
-        public int[] Salsry_STaff = new int[4];//三个级别的价格
+        public int[] Salsry_STaff = new int[4];//三个级别的价格（在Form1中设置） 
         public int Total_Staff;//理发师总人数
         MyLinkQueue<CustomerNode>[] QStaff1 = null;//三个级别的理发师队列
         MyLinkQueue<CustomerNode>[] QStaff2 = null;
@@ -237,7 +237,7 @@ namespace 离散事件模拟
         }
         #endregion
         #region//初始化理发师工作状态表的相关操作
-        private void Delete()
+        private void Delete()//把表格全部删除
         {
             int cnt = data.RowCount;
             for (int i = cnt - 2; i >= 0; i--)
@@ -246,7 +246,7 @@ namespace 离散事件模拟
             }
 
         }
-        private void Initial_Data()
+        private void Initial_Data()//初始化表格
         {
             Delete();
             int cnt = 0;
@@ -264,12 +264,11 @@ namespace 离散事件模拟
             }
         }
         #endregion
-        public int First(Event item)
+        public int First(Event item)//用于找到在事件链表中应该插入的位置，保证链表按事件发生时间的正序
         {
             int cur = 0;
             for (int i = 0; i < ev.Count; i++)
             {
-                //Console.WriteLine(ev[i].OccurTime + " "+item.OccurTime);
                 if (ev[i].OccurTime <= item.OccurTime)
                 {
                     cur++;
@@ -281,19 +280,18 @@ namespace 离散事件模拟
         #region//顾客到达和离开
         public void CustomerArrived()
         {
-            en.Grade = rd.Next(1, 4);
+            en.Grade = rd.Next(1, 4);//生成顾客级别
             ++CustomerNum; //增加客户数量
-            en.Number = CustomerNum;
-
-            int durTime = rd.Next(600, 3600);                      //产生0-30 间的随机整数，为到达客户等待的时间。
-            int interTime = rd.Next(0, 600);                      //产生0-5 间的随机整数，为与下一客户到达时间的时间间隔。
-            int depT = en.OccurTime + durTime;
-            int arrT = en.OccurTime + interTime;
+            en.Number = CustomerNum;//记录客户编号
+            int durTime = rd.Next(600, 3601);     //产生600-3600秒（10分钟到一小时）间的随机整数，为到达客户等待的时间。
+            int interTime = rd.Next(0, 601);      //产生0-600秒 间的随机整数，为与下一客户到达时间的时间间隔。
+            int depT = en.OccurTime + durTime;      //计算当前顾客的离开时间
+            int arrT = en.OccurTime + interTime;    //计算下一个顾客的到达时间
             //开始排队，找到最短队伍，并加入队伍。
-            int i = MinQueue(en.Grade);
-            cn.OccurTime = en.OccurTime;
-            cn.Duration = durTime;
-            cn.Number = en.Number;
+            int i = MinQueue(en.Grade);             //找到该级别理发师队列最短的队伍
+            cn.OccurTime = en.OccurTime;            //顾客的离开时间
+            cn.Duration = durTime;                  //顾客的逗留时间
+            cn.Number = en.Number;                  //顾客的编号
             if (en.Grade == 1)
             {
                 QStaff1[i].EnQueue(cn);
@@ -307,24 +305,19 @@ namespace 离散事件模拟
                 QStaff3[i].EnQueue(cn);
             }
             //
-            en.OccurTime = depT;
+            en.OccurTime = depT;                    
             en.NType = i;
             en.dur = durTime;
-            text.Text = "第" + (++Number_event).ToString() + "个事件 " + "有新客户！  时间" + StartTime.AddSeconds(en.OccurTime-en.dur).ToLongTimeString().ToString() + "第" + en.Number + "号顾客将由 " + en.Grade.ToString() + " 级别的第" + (en.NType + 1).ToString() + " 位理发师进行服务\r\n" + text.Text;
-            //text.Text= "第" + (++Number_event).ToString() + "个事件 "+"有新客户！" + " 编号"+en.Number+" "+StartTime.AddSeconds(en.OccurTime).ToLongTimeString() + " 逗留时间 " + durTime.ToString() + " 级别" + en.Grade.ToString() + " 第几位" + i.ToString()+"\r\n"+text.Text;
+            text.Text = "第" + (++Number_event).ToString() + "个事件 " + "有新客户！  时间" + StartTime.AddSeconds(en.OccurTime-en.dur).ToLongTimeString().ToString() + "第" + en.Number + "号顾客将由 " + en.Grade.ToString() + " 级别的第" + (en.NType + 1).ToString() + " 位理发师进行服务\r\n" + text.Text;         
             //把当前客户离开事件，加入事件列表
-            
-
             int cur = First(en);
-            ev.Insert(cur, en);//还没有实现自动按顺序插入！！！！！
-
+            ev.Insert(cur, en);
             //下一客户到达事件，加入事件列表。
             en.OccurTime = arrT;
             en.NType = 0;
             en.dur = 0;
             en.Grade = 0;
-            //Console.WriteLine(en.OccurTime.ToString() + " " + CloseTime.ToString() + "  !!!!");
-            if (en.OccurTime < CloseTime)
+            if (en.OccurTime < CloseTime)//顾客的到达时间小于关店时间就进店，否则不进店
             {
                 cur = First(en);
                 ev.Insert(cur, en);
@@ -347,15 +340,15 @@ namespace 离散事件模拟
             {
                 temp = QStaff3[i].DeQueue();
             }
-            Number_Customer[en.Grade]++;
-            TotalTime += temp.Duration;
-            text1.Text = Convert.ToString(TotalTime / CustomerNum)+"秒";
+            Number_Customer[en.Grade]++;//记录各级别顾客的结账人数
+            TotalTime += temp.Duration;//记录顾客的总逗留时间
+            text1.Text = Convert.ToString(TotalTime / Number_Customer[1]+Number_Customer[2]+Number_Customer[3])+"秒";
             int money = Number_Customer[1] * Salsry_STaff[1]+ Number_Customer[2] * Salsry_STaff[2]+ Number_Customer[3] * Salsry_STaff[3];
-            //text2.Text = Number_Customer[1].ToString()+ Salsry_STaff[1].ToString()+Number_Customer[2].ToString()+Salsry_STaff[2].ToString() + Number_Customer[3].ToString() + Salsry_STaff[3];
             text2.Text = money.ToString()+"元";
 
         }
         #endregion
+
         public void OpenDay()
         {
 
@@ -458,7 +451,6 @@ namespace 离散事件模拟
             }
             guandian.Show();
             th.Abort();
-
         }
         public void kaishi()
         {
@@ -468,7 +460,3 @@ namespace 离散事件模拟
     }
     #endregion
 }
-
-
-
-	
