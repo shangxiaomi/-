@@ -30,6 +30,27 @@ namespace 离散事件模拟
         bool finish=false;
         private void button1_Click(object sender, EventArgs e)
         {
+            
+            if(finish==false)
+            {
+                MessageBox.Show("请先设置理发师的信息，然后再点击“设置理发师信息”按钮");
+                return;
+            }
+            try
+            {
+                Exception ex = new Exception();
+                int cnt = dataGridView1.RowCount;
+                for(int i=0;i<cnt;i++)
+                {
+                    if (dataGridView1.Rows[i].Cells[1].Value.ToString() == String.Empty)
+                        throw ex;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("请设置理发师编号设置"); 
+                return;
+            }
             try
             {
                 Exception t = new Exception();
@@ -45,26 +66,6 @@ namespace 离散事件模拟
             catch
             {
                 MessageBox.Show("请输入正确的开店、闭店时间(00:00:00---23:59:59)");
-                return;
-            }
-            if(finish==false)
-            {
-                MessageBox.Show("请先设置理发师的信息，然后再点击“设置理发师信息”按钮");
-                return;
-            }
-            try
-            {
-                Exception ex = new Exception();
-                int cnt = dataGridView1.RowCount;
-                for(int i=0;i<cnt-1;i++)
-                {
-                    if (dataGridView1.Rows[i].Cells[1].Value.ToString() == String.Empty)
-                        throw ex;
-                }
-            }
-            catch
-            {
-                MessageBox.Show("请设置理发师编号设置"); 
                 return;
             }
             DateTime Start = new DateTime(11, 11, 11, int.Parse(comboBox1.Text), int.Parse(comboBox3.Text), int.Parse(comboBox5.Text));
@@ -393,34 +394,6 @@ namespace 离散事件模拟
             }
         }
         #endregion
-        #region//初始化理发师工作状态表的相关操作
-        private void Delete()//把表格全部删除
-		{
-			int cnt = data.RowCount;
-			for (int i = cnt - 2; i >= 0; i--)
-			{
-				data.Rows.Remove(data.Rows[i]);
-			}
-
-		}
-		private void Initial_Data()//初始化表格
-		{
-			//Delete();
-			int cnt = 0;
-			for (int i = 1; i <= 3; i++)
-			{
-				for (int j = 0; j < Number_Staff[i]; j++)
-				{
-					data.Rows.Add();
-					data.Rows[cnt].Height = 30;
-					data.Rows[cnt].Cells[0].Value = (cnt + 1).ToString();
-					data.Rows[cnt].Cells[1].Value = i.ToString();
-					data.Rows[cnt].Cells[2].Value = "空";
-					cnt++;
-				}
-			}
-		}
-		#endregion
 		public int First(Event item)//用于找到在事件链表中应该插入的位置，保证链表按事件发生时间的正序
 		{
 			int cur = 0;
@@ -536,7 +509,6 @@ namespace 离散事件模拟
 			Number_Staff[1] = Convert.ToInt32(text3.Text);
 			Number_Staff[2] = Convert.ToInt32(text4.Text);
 			Number_Staff[3] = Convert.ToInt32(text5.Text);
-			//Initial_Data();
 			QStaff1 = new MyLinkQueue<CustomerNode>[Number_Staff[1]];
 			for (int i = 0; i < Number_Staff[1]; i++)
 			{
