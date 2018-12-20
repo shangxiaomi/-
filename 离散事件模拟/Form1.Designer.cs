@@ -76,6 +76,7 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
@@ -97,9 +98,9 @@
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -847,6 +848,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button5);
             this.groupBox3.Controls.Add(this.button4);
             this.groupBox3.Controls.Add(this.button3);
             this.groupBox3.Controls.Add(this.textBox13);
@@ -865,6 +867,16 @@
             this.groupBox3.Size = new System.Drawing.Size(551, 244);
             this.groupBox3.TabIndex = 47;
             this.groupBox3.TabStop = false;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(386, 163);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(130, 23);
+            this.button5.TabIndex = 47;
+            this.button5.Text = "一键设置编号";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button4
             // 
@@ -1070,14 +1082,14 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "开店流程";
             // 
-            // label26
+            // label28
             // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(6, 45);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(143, 15);
-            this.label26.TabIndex = 0;
-            this.label26.Text = "1、设置理发师信息";
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(6, 140);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(111, 15);
+            this.label28.TabIndex = 2;
+            this.label28.Text = "3、设置好时间";
             // 
             // label27
             // 
@@ -1088,14 +1100,14 @@
             this.label27.TabIndex = 1;
             this.label27.Text = "2、设置理发师编号";
             // 
-            // label28
+            // label26
             // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(6, 140);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(111, 15);
-            this.label28.TabIndex = 2;
-            this.label28.Text = "3、设置好时间";
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(6, 45);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(143, 15);
+            this.label26.TabIndex = 0;
+            this.label26.Text = "1、设置理发师信息";
             // 
             // Form1
             // 
@@ -1209,6 +1221,7 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Button button5;
     }
 }
 

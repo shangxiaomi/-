@@ -24,8 +24,10 @@ namespace 离散事件模拟
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            dataGridView1.AllowUserToAddRows = false;
             button2.Hide();
             button4.Hide();
+            button5.Hide();
         }
         bool finish=false;
         private void button1_Click(object sender, EventArgs e)
@@ -115,6 +117,7 @@ namespace 离散事件模拟
             op.guandian = button2;
             op.data = dataGridView1;
             op.CloseTime = temp;
+            button5.Hide(); button4.Hide();
             dataGridView1.ReadOnly = true;
             this.Text = "理发馆仿真模拟系统--营业中";
             op.kaishi();
@@ -151,7 +154,6 @@ namespace 离散事件模拟
             textBox12.ReadOnly = false;
             textBox13.ReadOnly = false;
             dataGridView1.ReadOnly = false;
-            dataGridView1.AllowUserToAddRows = true;
             for (int i = 0; i < 5; i++)
             {
                 if (i == 1) continue;
@@ -161,6 +163,7 @@ namespace 离散事件模拟
             button1.Show();
             button3.Show();
             button4.Hide();
+            
         }
 		private void groupBox2_Enter(object sender, EventArgs e)
 		{
@@ -207,10 +210,11 @@ namespace 离散事件模拟
         }
         private void Delete()//把表格全部删除
         {
+
             int cnt = dataGridView1.RowCount;
-            for (int i = cnt - 2; i >= 0; i--)
+            for (; cnt!=0; cnt=dataGridView1.RowCount)
             {
-                dataGridView1.Rows.Remove(dataGridView1.Rows[i]);
+                dataGridView1.Rows.Remove(dataGridView1.Rows[0]);
             }
         }
         private void Initial_Data()//初始化表格
@@ -265,7 +269,6 @@ namespace 离散事件模拟
             op.Number_Staff[3] = int.Parse(textBox12.Text);
             Delete();
             Initial_Data();
-            dataGridView1.AllowUserToAddRows = false;
             for (int i = 0; i < 5; i++)
             {
                 if (i == 1) continue;
@@ -273,6 +276,7 @@ namespace 离散事件模拟
             }
             button3.Hide();
             button4.Show();
+            button5.Show();
             finish = true;
         }
 
@@ -280,8 +284,18 @@ namespace 离散事件模拟
         {
             Delete();
             finish = false;
+            button5.Hide();
             button4.Hide();
             button3.Show();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            int cnt = dataGridView1.RowCount;
+            for(int i=0;i<cnt;i++)
+            {
+                dataGridView1.Rows[i].Cells[1].Value = (i+1).ToString();
+            }
         }
     }
     #region//时间节点（结构体）
