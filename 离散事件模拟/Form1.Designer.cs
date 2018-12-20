@@ -512,7 +512,6 @@
             this.dataGridView1.RowTemplate.Height = 27;
             this.dataGridView1.Size = new System.Drawing.Size(672, 383);
             this.dataGridView1.TabIndex = 22;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // Column1
             // 
@@ -721,7 +720,6 @@
             this.textBox11.Name = "textBox11";
             this.textBox11.Size = new System.Drawing.Size(100, 25);
             this.textBox11.TabIndex = 42;
-            this.textBox11.TextChanged += new System.EventHandler(this.textBox11_TextChanged);
             // 
             // textBox12
             // 
@@ -818,7 +816,6 @@
             this.groupBox2.Size = new System.Drawing.Size(280, 183);
             this.groupBox2.TabIndex = 46;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // textBox17
             // 
@@ -935,7 +932,7 @@
             this.textBox14.ReadOnly = true;
             this.textBox14.Size = new System.Drawing.Size(53, 25);
             this.textBox14.TabIndex = 51;
-            this.textBox14.TextChanged += new System.EventHandler(this.textBox14_TextChanged);
+           
             // 
             // textBox15
             // 
@@ -961,7 +958,6 @@
             this.label20.Size = new System.Drawing.Size(29, 105);
             this.label20.TabIndex = 54;
             this.label20.Text = "收入信息";
-            this.label20.Click += new System.EventHandler(this.label20_Click);
             // 
             // groupBox4
             // 

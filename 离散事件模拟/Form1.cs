@@ -72,7 +72,6 @@ namespace 离散事件模拟
             }
             DateTime Start = new DateTime(11, 11, 11, int.Parse(comboBox1.Text), int.Parse(comboBox3.Text), int.Parse(comboBox5.Text));
             End = new DateTime(11, 11, 11, int.Parse(comboBox2.Text), int.Parse(comboBox4.Text), int.Parse(comboBox6.Text));
-            //MessageBox.Show(Start.ToLongTimeString().ToString() + "\n" + End.ToLongTimeString().ToString());
             int temp = (int)(End - Start).TotalSeconds;
             if (temp <= 0) {
                 MessageBox.Show("时间设置的不对哦"); return;
@@ -94,12 +93,6 @@ namespace 离散事件模拟
             textBox18.Text = "";
             textBox19.Text = "";
             textBox20.Text = "";
-            /*comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox4.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox5.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox6.DropDownStyle = ComboBoxStyle.DropDownList;*/
             op.StartTime = Start;
             op.Salsry_STaff[1] = int.Parse(textBox9.Text);
             op.Salsry_STaff[2] = int.Parse(textBox11.Text);
@@ -165,37 +158,12 @@ namespace 离散事件模拟
             button4.Hide();
             
         }
-		private void groupBox2_Enter(object sender, EventArgs e)
-		{
-
-		}
-
-		private void textBox11_TextChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void label20_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void textBox14_TextChanged(object sender, EventArgs e)
-		{
-
-		}
 
         private void 软件信息ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2 xinxi = new Form2();
             xinxi.ShowDialog();
         }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
         private void 事件发生间隔设置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form3 t = new Form3();
@@ -391,7 +359,7 @@ namespace 离散事件模拟
 
 		}
         #endregion
-        #region
+        #region//用于记录队列长度
         void Sum_Queue()
         {
             for(int i=0;i<Number_Staff[1];i++)
@@ -408,7 +376,8 @@ namespace 离散事件模拟
             }
         }
         #endregion
-		public int First(Event item)//用于找到在事件链表中应该插入的位置，保证链表按事件发生时间的正序
+        #region//顾客到达和离开
+        public int First(Event item)//用于找到在事件链表中应该插入的位置，保证链表按事件发生时间的正序
 		{
 			int cur = 0;
 			for (int i = 0; i < ev.Count; i++)
@@ -421,7 +390,6 @@ namespace 离散事件模拟
 			}
 			return cur;
 		}
-		#region//顾客到达和离开
 		public void CustomerArrived()
 		{
 			en.Grade = rd.Next(1, 4);//生成顾客级别
@@ -500,7 +468,6 @@ namespace 离散事件模拟
             Update();
         }
 		#endregion
-
 		public void OpenDay()
 		{
             Queuelength = 0;
