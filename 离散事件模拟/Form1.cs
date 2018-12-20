@@ -42,7 +42,7 @@ namespace 离散事件模拟
             }
             catch
             {
-                MessageBox.Show("请输入正确的开店、闭店时间");
+                MessageBox.Show("请输入正确的开店、闭店时间(00:00:00---23:59:59)");
                 return;
             }
             try
@@ -55,7 +55,7 @@ namespace 离散事件模拟
             }
             catch
             {
-                MessageBox.Show("请输入正确的各级别理发师人数");
+                MessageBox.Show("请输入正确的各级别理发师人数(1---100)");
                 return;
             }
             try
@@ -68,7 +68,7 @@ namespace 离散事件模拟
             }
             catch
             {
-                MessageBox.Show("请输入正确的理发师工资");
+                MessageBox.Show("请输入正确的理发师工资(工资大于0)");
                 return;
             }
             
@@ -411,8 +411,8 @@ namespace 离散事件模拟
 			en.Grade = 0;//顾客的理发师级别;
 			TotalTime = 0;
 			CustomerNum = 0;
-			en.OccurTime = 0;  //设置第一个客户到达事件
-			en.NType = 0;
+			en.OccurTime = rd.Next(0,601);//设置第一个客户到达事件
+            en.NType = 0;
 			ev.Add(en);
             text.Text = "";
 			onecustumer.Text = (Number_Customer[1]).ToString();
