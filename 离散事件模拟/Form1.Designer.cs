@@ -40,6 +40,7 @@
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -75,6 +76,8 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
@@ -93,12 +96,17 @@
             this.事件发生间隔设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -494,6 +502,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
+            this.Column5,
             this.Column2,
             this.Column3,
             this.Column4});
@@ -507,9 +516,14 @@
             // Column1
             // 
             this.Column1.DataPropertyName = "122";
-            this.Column1.HeaderText = "编号";
+            this.Column1.HeaderText = "座椅编号";
             this.Column1.Name = "Column1";
             this.Column1.Width = 150;
+            // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "理发师编号";
+            this.Column5.Name = "Column5";
             // 
             // Column2
             // 
@@ -620,7 +634,7 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("黑体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button2.Location = new System.Drawing.Point(235, 187);
+            this.button2.Location = new System.Drawing.Point(227, 187);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 33;
@@ -744,7 +758,7 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Location = new System.Drawing.Point(12, 31);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(551, 236);
+            this.groupBox1.Size = new System.Drawing.Size(380, 236);
             this.groupBox1.TabIndex = 45;
             this.groupBox1.TabStop = false;
             // 
@@ -833,6 +847,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button4);
+            this.groupBox3.Controls.Add(this.button3);
             this.groupBox3.Controls.Add(this.textBox13);
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.textBox12);
@@ -849,6 +865,26 @@
             this.groupBox3.Size = new System.Drawing.Size(551, 244);
             this.groupBox3.TabIndex = 47;
             this.groupBox3.TabStop = false;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(415, 122);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 46;
+            this.button4.Text = "重置";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(386, 122);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(134, 23);
+            this.button3.TabIndex = 45;
+            this.button3.Text = "设置理发师信息";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label17
             // 
@@ -1022,11 +1058,51 @@
             this.label23.TabIndex = 58;
             this.label23.Text = "理发师状态显示";
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.label28);
+            this.groupBox5.Controls.Add(this.label27);
+            this.groupBox5.Controls.Add(this.label26);
+            this.groupBox5.Location = new System.Drawing.Point(411, 31);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(163, 236);
+            this.groupBox5.TabIndex = 59;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "开店流程";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(6, 45);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(143, 15);
+            this.label26.TabIndex = 0;
+            this.label26.Text = "1、设置理发师信息";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(6, 92);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(143, 15);
+            this.label27.TabIndex = 1;
+            this.label27.Text = "2、设置理发师编号";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(6, 140);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(111, 15);
+            this.label28.TabIndex = 2;
+            this.label28.Text = "3、设置好时间";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1367, 743);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.label23);
             this.Controls.Add(this.label22);
             this.Controls.Add(this.dataGridView1);
@@ -1052,6 +1128,8 @@
             this.groupBox4.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1114,16 +1192,23 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.ToolStripMenuItem 事件发生间隔设置ToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.TextBox textBox17;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.TextBox textBox20;
         private System.Windows.Forms.TextBox textBox19;
         private System.Windows.Forms.TextBox textBox18;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label26;
     }
 }
 

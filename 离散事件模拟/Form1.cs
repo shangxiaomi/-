@@ -25,7 +25,9 @@ namespace 离散事件模拟
         private void Form1_Load(object sender, EventArgs e)
         {
             button2.Hide();
+            button4.Hide();
         }
+        bool finish=false;
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -45,33 +47,26 @@ namespace 离散事件模拟
                 MessageBox.Show("请输入正确的开店、闭店时间(00:00:00---23:59:59)");
                 return;
             }
-            try
+            if(finish==false)
             {
-                Exception t = new Exception();
-                int a = int.Parse(textBox8.Text);
-                int b = int.Parse(textBox10.Text);
-                int c = int.Parse(textBox12.Text);
-                if (a <= 0 || c <= 0 || b <= 0 || a > 100 || b > 100 || c > 100) throw t;
-            }
-            catch
-            {
-                MessageBox.Show("请输入正确的各级别理发师人数(1---100)");
+                MessageBox.Show("请先设置理发师的信息，然后再点击“设置理发师信息”按钮");
                 return;
             }
             try
             {
-                Exception t = new Exception();
-                int a = int.Parse(textBox13.Text);
-                int b = int.Parse(textBox9.Text);
-                int c = int.Parse(textBox11.Text);
-                if (a <= 0 || c <= 0 || b <= 0 ) throw t;
+                Exception ex = new Exception();
+                int cnt = dataGridView1.RowCount;
+                for(int i=0;i<cnt-1;i++)
+                {
+                    if (dataGridView1.Rows[i].Cells[1].Value.ToString() == String.Empty)
+                        throw ex;
+                }
             }
             catch
             {
-                MessageBox.Show("请输入正确的理发师工资(工资大于0)");
+                MessageBox.Show("请设置理发师编号设置"); 
                 return;
             }
-            
             DateTime Start = new DateTime(11, 11, 11, int.Parse(comboBox1.Text), int.Parse(comboBox3.Text), int.Parse(comboBox5.Text));
             End = new DateTime(11, 11, 11, int.Parse(comboBox2.Text), int.Parse(comboBox4.Text), int.Parse(comboBox6.Text));
             //MessageBox.Show(Start.ToLongTimeString().ToString() + "\n" + End.ToLongTimeString().ToString());
@@ -119,6 +114,7 @@ namespace 离散事件模拟
             op.guandian = button2;
             op.data = dataGridView1;
             op.CloseTime = temp;
+            dataGridView1.ReadOnly = true;
             this.Text = "理发馆仿真模拟系统--营业中";
             op.kaishi();
             
@@ -146,22 +142,25 @@ namespace 离散事件模拟
         }
         private void CloseDay()
         {
+            finish = false;
             textBox8.ReadOnly = false;
             textBox9.ReadOnly = false;
             textBox10.ReadOnly = false;
             textBox11.ReadOnly = false;
             textBox12.ReadOnly = false;
             textBox13.ReadOnly = false;
+            dataGridView1.ReadOnly = false;
+            dataGridView1.AllowUserToAddRows = true;
+            for (int i = 0; i < 5; i++)
+            {
+                if (i == 1) continue;
+                dataGridView1.Columns[i].ReadOnly = false;
+            }
             this.Text = "理发馆仿真模拟系统";
             button1.Show();
-            /*comboBox1.DropDownStyle = ComboBoxStyle.DropDown;
-            comboBox2.DropDownStyle = ComboBoxStyle.DropDown;
-            comboBox3.DropDownStyle = ComboBoxStyle.DropDown;
-            comboBox4.DropDownStyle = ComboBoxStyle.DropDown;
-            comboBox5.DropDownStyle = ComboBoxStyle.DropDown;
-            comboBox6.DropDownStyle = ComboBoxStyle.DropDown;*/
+            button3.Show();
+            button4.Hide();
         }
-
 		private void groupBox2_Enter(object sender, EventArgs e)
 		{
 
@@ -204,6 +203,84 @@ namespace 离散事件模拟
         private void label11_Click(object sender, EventArgs e)
         {
 
+        }
+        private void Delete()//把表格全部删除
+        {
+            int cnt = dataGridView1.RowCount;
+            for (int i = cnt - 2; i >= 0; i--)
+            {
+                dataGridView1.Rows.Remove(dataGridView1.Rows[i]);
+            }
+        }
+        private void Initial_Data()//初始化表格
+        {
+            Delete();
+            int cnt = 0;
+            for (int i = 1; i <= 3; i++)
+            {
+                for (int j = 0; j < op.Number_Staff[i]; j++)
+                {
+                    dataGridView1.Rows.Add();
+                    dataGridView1.Rows[cnt].Height = 30;
+                    dataGridView1.Rows[cnt].Cells[0].Value = (cnt+1).ToString();
+                    dataGridView1.Rows[cnt].Cells[2].Value = i.ToString();
+                    dataGridView1.Rows[cnt].Cells[4].Value = "空";
+                    cnt++;
+                }
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            
+            try
+            {
+                Exception t = new Exception();
+                int a = int.Parse(textBox8.Text);
+                int b = int.Parse(textBox10.Text);
+                int c = int.Parse(textBox12.Text);
+                if (a <= 0 || c <= 0 || b <= 0 || a > 100 || b > 100 || c > 100) throw t;
+            }
+            catch
+            {
+                MessageBox.Show("请输入正确的各级别理发师人数(1---100)");
+                return;
+            }
+            try
+            {
+                Exception t = new Exception();
+                int a = int.Parse(textBox13.Text);
+                int b = int.Parse(textBox9.Text);
+                int c = int.Parse(textBox11.Text);
+                if (a <= 0 || c <= 0 || b <= 0) throw t;
+            }
+            catch
+            {
+                MessageBox.Show("请输入正确的理发师工资(工资大于0)");
+                return;
+            }
+            op.Number_Staff[1] = int.Parse(textBox8.Text);
+            op.Number_Staff[2] = int.Parse(textBox10.Text);
+            op.Number_Staff[3] = int.Parse(textBox12.Text);
+            Delete();
+            Initial_Data();
+            dataGridView1.AllowUserToAddRows = false;
+            for (int i = 0; i < 5; i++)
+            {
+                if (i == 1) continue;
+                dataGridView1.Columns[i].ReadOnly = true;
+            }
+            button3.Hide();
+            button4.Show();
+            finish = true;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Delete();
+            finish = false;
+            button4.Hide();
+            button3.Show();
         }
     }
     #region//时间节点（结构体）
@@ -254,7 +331,7 @@ namespace 离散事件模拟
 		Event en = new Event();//事件节点
 		CustomerNode cn = new CustomerNode();//顾客节点
 		public int[] Number_Customer = new int[4];//三个级别的已经结账顾客各有多少
-		int[] Number_Staff = new int[4];//三个级别的理发师各多少人
+		public int[] Number_Staff = new int[4];//三个级别的理发师各多少人
 		public int[] Salsry_STaff = new int[4];//三个级别的价格（在Form1中设置）
         public int[] income = new int[4];//当前级别的收入
 		public int Total_Staff;//理发师总人数
@@ -274,23 +351,23 @@ namespace 离散事件模拟
 					if (i == 1)
 					{
 						len = QStaff1[j].Size;
-						if (len > 0) data.Rows[cnt].Cells[2].Value = QStaff1[j].First().Number.ToString();
-						else data.Rows[cnt].Cells[2].Value = "空";
+						if (len > 0) data.Rows[cnt].Cells[3].Value = QStaff1[j].First().Number.ToString();
+						else data.Rows[cnt].Cells[3].Value = "空";
 					}
 					else if (i == 2)
 					{
 						len = QStaff2[j].Size;
-						if (len > 0) data.Rows[cnt].Cells[2].Value = QStaff2[j].First().Number.ToString();
-						else data.Rows[cnt].Cells[2].Value = "空";
+						if (len > 0) data.Rows[cnt].Cells[3].Value = QStaff2[j].First().Number.ToString();
+						else data.Rows[cnt].Cells[3].Value = "空";
 					}
 					else if (i == 3)
 					{
 						len = QStaff3[j].Size;
-						if (len > 0) data.Rows[cnt].Cells[2].Value = QStaff3[j].First().Number.ToString();
-						else data.Rows[cnt].Cells[2].Value = "空";
+						if (len > 0) data.Rows[cnt].Cells[3].Value = QStaff3[j].First().Number.ToString();
+						else data.Rows[cnt].Cells[3].Value = "空";
 					}
-					if (len > 0) data.Rows[cnt].Cells[3].Value = (len - 1).ToString();
-					else data.Rows[cnt].Cells[3].Value = "0";
+					if (len > 0) data.Rows[cnt].Cells[4].Value = (len - 1).ToString();
+					else data.Rows[cnt].Cells[4].Value = "0";
 					cnt++;
 				}
                 Queue_length.Text=((float)Queuelength / (float)Number_event).ToString();
@@ -328,7 +405,7 @@ namespace 离散事件模拟
 		}
 		private void Initial_Data()//初始化表格
 		{
-			Delete();
+			//Delete();
 			int cnt = 0;
 			for (int i = 1; i <= 3; i++)
 			{
@@ -459,7 +536,7 @@ namespace 离散事件模拟
 			Number_Staff[1] = Convert.ToInt32(text3.Text);
 			Number_Staff[2] = Convert.ToInt32(text4.Text);
 			Number_Staff[3] = Convert.ToInt32(text5.Text);
-			Initial_Data();
+			//Initial_Data();
 			QStaff1 = new MyLinkQueue<CustomerNode>[Number_Staff[1]];
 			for (int i = 0; i < Number_Staff[1]; i++)
 			{
