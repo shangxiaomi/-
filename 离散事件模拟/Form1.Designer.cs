@@ -518,30 +518,31 @@
             this.Column1.DataPropertyName = "122";
             this.Column1.HeaderText = "座椅编号";
             this.Column1.Name = "Column1";
-            this.Column1.Width = 150;
+            this.Column1.Width = 120;
             // 
             // Column5
             // 
             this.Column5.HeaderText = "理发师编号";
             this.Column5.Name = "Column5";
+            this.Column5.Width = 120;
             // 
             // Column2
             // 
             this.Column2.HeaderText = "级别";
             this.Column2.Name = "Column2";
-            this.Column2.Width = 150;
+            this.Column2.Width = 120;
             // 
             // Column3
             // 
             this.Column3.HeaderText = "当前服务顾客编号";
             this.Column3.Name = "Column3";
-            this.Column3.Width = 150;
+            this.Column3.Width = 120;
             // 
             // Column4
             // 
             this.Column4.HeaderText = "排队顾客人数";
             this.Column4.Name = "Column4";
-            this.Column4.Width = 150;
+            this.Column4.Width = 120;
             // 
             // label3
             // 
@@ -765,7 +766,7 @@
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label15.Location = new System.Drawing.Point(322, 21);
+            this.label15.Location = new System.Drawing.Point(329, 21);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(23, 15);
             this.label15.TabIndex = 36;
@@ -932,7 +933,6 @@
             this.textBox14.ReadOnly = true;
             this.textBox14.Size = new System.Drawing.Size(53, 25);
             this.textBox14.TabIndex = 51;
-           
             // 
             // textBox15
             // 
@@ -955,7 +955,7 @@
             this.label20.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label20.Location = new System.Drawing.Point(1, 65);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(29, 105);
+            this.label20.Size = new System.Drawing.Size(22, 68);
             this.label20.TabIndex = 54;
             this.label20.Text = "收入信息";
             // 
@@ -1121,7 +1121,9 @@
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox4);
             this.Font = new System.Drawing.Font("黑体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "理发馆仿真模拟系统";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1207,17 +1209,17 @@
         private System.Windows.Forms.TextBox textBox19;
         private System.Windows.Forms.TextBox textBox18;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
     }
 }
 
