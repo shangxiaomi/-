@@ -482,7 +482,13 @@ namespace 离散事件模拟
 			CustomerNum = 0;
 			en.OccurTime = rd.Next(0,601);//设置第一个客户到达事件
             en.NType = 0;
-			ev.Add(en);
+            if (en.OccurTime < CloseTime)
+            {
+                ev.Add(en);
+            }
+            else
+            { FactEnd = StartTime.AddSeconds(CloseTime);
+            }
             text.Text = "";
 			onecustumer.Text = (Number_Customer[1]).ToString();
 			twocustumer.Text = (Number_Customer[2]).ToString();
