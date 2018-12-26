@@ -269,10 +269,10 @@ namespace 离散事件模拟
     #region//时间节点（结构体）
     public struct Event
 	{
-		public int OccurTime;//事件发生时间
-        public int ArriveTime;
+		public int OccurTime;//事件发生时间（对于已经进店且开始理发的顾客来说是离开时间，对于未进店和已经进店但在排队的顾客来说是到达时间）
+        public int ArriveTime;//此事件记录的顾客的到达时间
 		public int NType;//第几位理发师
-		public int dur;//逗留时间
+		public int dur;//服务时间
 		public int Grade;//理发师级别
 		public int Number;//顾客编号
 	}
@@ -280,9 +280,9 @@ namespace 离散事件模拟
 	#region//顾客节点（结构体）
 	struct CustomerNode
 	{
-        public int ArriveTime;
-		public int OccurTime;//顾客的离开时间，到达时间就是离开时间减去逗留时间
-		public int Duration;//逗留时间
+        public int ArriveTime;//顾客的到达时间
+		public int OccurTime;//事件发生时间
+		public int Duration;//服务时间
 		public int Number;//顾客编号
 	}
 	#endregion
@@ -290,10 +290,10 @@ namespace 离散事件模拟
 	public class Simulation
 	{
         #region//相关字段
-        public int Queuelength=0;
-        public int Jiange = 100;
-        public TextBox Queue_length = null;
-		public TextBox onecustumer = null;
+        public int Queuelength=0;//用于记录队列的长度累积
+        public int Jiange = 100;//两个事件发生的间隔，在Form1中可以修改
+        public TextBox Queue_length = null;//用于显示平均队列长度
+		public TextBox onecustumer = null;//用于显示相应级别的已经结账顾客数
 		public TextBox twocustumer = null;
 		public TextBox threecustumer = null;
 		public DateTime FactEnd;//实际关店时间（DateTime类）
@@ -325,7 +325,7 @@ namespace 离散事件模拟
 		MyLinkQueue<CustomerNode>[] QStaff2 = null;
 		MyLinkQueue<CustomerNode>[] QStaff3 = null;
 		#endregion
-		#region//更新理发师工作状态函数
+		#region//更新Form1中的理发师工作状态函数
 		private void Update()
 		{
 			int cnt = 0;
@@ -356,7 +356,7 @@ namespace 离散事件模拟
 					else data.Rows[cnt].Cells[4].Value = "0";
 					cnt++;
 				}
-                Queue_length.Text=((float)Queuelength / (float)Number_event).ToString();
+                Queue_length.Text=((float)Queuelength / (float)Number_event).ToString();//计算等待队列平均长度
 
             }
 
@@ -396,7 +396,7 @@ namespace 离散事件模拟
 		public void CustomerArrived()
 		{
 			en.Grade = rd.Next(1, 4);//生成顾客级别
-            CurrentTime = en.ArriveTime;
+            CurrentTime = en.ArriveTime;//更改系统当前时间
 			++CustomerNum; //增加客户数量
 			en.Number = CustomerNum;//记录客户编号
 			int durTime = rd.Next(600, 3601);     //产生600-3600秒（10分钟到一小时）间的随机整数，为到达客户等待的时间。
@@ -423,18 +423,19 @@ namespace 离散事件模拟
             Sum_Queue();
             
             int cur;
+            en.NType = i;
+            en.dur = durTime;
             text.Text = "第" + (++Number_event).ToString() + "个事件 " + "有新客户！  时间" + StartTime.AddSeconds(cn.ArriveTime).ToLongTimeString().ToString() + "第" + en.Number + "号顾客将由 " + en.Grade.ToString() + " 级别的第" + (en.NType + 1).ToString() + " 位理发师进行服务\r\n" + text.Text;
             if ((en.Grade == 1 && QStaff1[i].Size <= 1) || (en.Grade == 2 && QStaff2[i].Size <= 1) || (en.Grade == 3 && QStaff3[i].Size <= 1))
             {
                 int depT = cn.ArriveTime + durTime;      //计算当前顾客的离开时间
                 
                 en.OccurTime = depT;
-                en.NType = i;
-                en.dur = durTime;
                 cur = First(en);
                 ev.Insert(cur, en);
             }
-            //如果当前顾客能立马被服务就加入时间链表
+            //如果当前顾客能立马被服务就将当前顾客离开的事件加入事件链表
+
 			//下一客户到达事件，加入事件列表。
 			en.ArriveTime = arrT;
             en.OccurTime = en.ArriveTime;
@@ -469,15 +470,16 @@ namespace 离散事件模拟
             }
             CurrentTime = en.OccurTime;//更新系统时间
 			Number_Customer[en.Grade]++;//记录各级别顾客的结账人数
-			onecustumer.Text = (Number_Customer[1]).ToString();
+			onecustumer.Text = (Number_Customer[1]).ToString();//更改Form1中已经结账顾客人数
 			twocustumer.Text = (Number_Customer[2]).ToString();
 			threecustumer.Text = (Number_Customer[3]).ToString();
-            //TotalTime += temp.Duration;//记录顾客的总逗留时间
             TotalTime += (CurrentTime-temp.ArriveTime);//记录顾客的总逗留时间
             text1.Text = Convert.ToString(TotalTime / (Number_Customer[1] + Number_Customer[2] + Number_Customer[3])) + "秒";
 			int money = income[1]+income[2]+income[3];
 			text2.Text = money.ToString() + "元";
             Sum_Queue();
+            
+            //如果当前已经出队的队列还有顾客等待，就开始服务等待顾客，将此顾客的离开事件加入时间链表
             if((1==grade&&QStaff1[i].Size!=0)|| (2 == grade && QStaff2[i].Size != 0)|| (3 == grade && QStaff3[i].Size != 0))
             {
                 if(1==grade)
@@ -492,14 +494,14 @@ namespace 离散事件模拟
                 {
                     temp = QStaff3[i].First();
                 }
-                int depT = CurrentTime + temp.Duration;      //计算当前顾客的离开时间
+                int depT = CurrentTime + temp.Duration;  //计算当前顾客的离开时间
                 en.OccurTime = depT;
-                en.NType = i;
-                en.Grade = grade;
-                en.dur = temp.Duration;
-                en.ArriveTime = temp.ArriveTime;
-                en.Number = temp.Number;
-                int cur = First(en);
+                en.NType = i;//记录此顾客的理发师号码
+                en.Grade = grade;//记录此顾客的理发师级别
+                en.dur = temp.Duration;//记录此顾客的服务时间
+                en.ArriveTime = temp.ArriveTime;//记录此顾客的到达时间
+                en.Number = temp.Number;//记录此顾客的号码
+                int cur = First(en);//插入事件链表
                 ev.Insert(cur, en);
             }
             Update();
