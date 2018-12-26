@@ -84,9 +84,9 @@
             this.label6.Font = new System.Drawing.Font("黑体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label6.Location = new System.Drawing.Point(308, 101);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(103, 15);
+            this.label6.Size = new System.Drawing.Size(183, 15);
             this.label6.TabIndex = 5;
-            this.label6.Text = "后台代码开发";
+            this.label6.Text = "离散事件驱动模型、链表";
             // 
             // label7
             // 
@@ -94,9 +94,9 @@
             this.label7.Font = new System.Drawing.Font("黑体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label7.Location = new System.Drawing.Point(308, 130);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(119, 15);
+            this.label7.Size = new System.Drawing.Size(167, 15);
             this.label7.TabIndex = 6;
-            this.label7.Text = "界面设计、测试";
+            this.label7.Text = "界面设计、测试、队列";
             // 
             // textBox1
             // 
