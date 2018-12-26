@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DataStructure.LinkedList
+namespace LinkedList
 {
     /// <summary>
     /// 链表节点定义

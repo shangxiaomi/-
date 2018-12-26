@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataStructure.Queue
+namespace Queue
 {
     /// <summary>
     /// 基于链表的队列节点
