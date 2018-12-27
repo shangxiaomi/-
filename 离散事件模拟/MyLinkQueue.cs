@@ -113,5 +113,33 @@ namespace Queue
                 return this.size;
             }
         }
+
+        // 索引器
+        public T this[int index]
+        {
+            get
+            {
+                return this.GetNodeByIndex(index).Item;
+            }
+            set
+            {
+                this.GetNodeByIndex(index).Item = value;
+            }
+        }
+
+        private Node<T> GetNodeByIndex(int index)
+        {
+            if (index < 0 || index >= this.size)
+            {
+                throw new ArgumentOutOfRangeException("index", "索引超出范围");
+            }
+
+            Node<T> tempNode = this.head;
+            for (int i = 0; i < index; i++)
+            {
+                tempNode = tempNode.Next;
+            }
+            return tempNode;
+        }
     }
 }

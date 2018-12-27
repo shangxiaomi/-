@@ -289,6 +289,7 @@ namespace 离散事件模拟
 	public class Simulation
 	{
         #region//相关字段
+        int [,]TheLeaveTimeOfFirstCustomer_Queue;
         public int Queuelength=0;//用于记录队列的长度累积
         public int Jiange = 100;//两个事件发生的间隔，在Form1中可以修改
         public TextBox Queue_length = null;//用于显示平均队列长度
@@ -366,15 +367,15 @@ namespace 离散事件模拟
         {
             for(int i=0;i<Number_Staff[1];i++)
             {
-                if(QStaff1[i].Size>1)Queuelength += QStaff1[i].Size;
+                if(QStaff1[i].Size>1)Queuelength += (QStaff1[i].Size-1);
             }
             for (int i = 0; i < Number_Staff[2]; i++)
             {
-                if (QStaff2[i].Size > 1) Queuelength += QStaff2[i].Size;
+                if (QStaff2[i].Size > 1) Queuelength += (QStaff2[i].Size-1);
             }
             for (int i = 0; i < Number_Staff[3]; i++)
             {
-                if (QStaff3[i].Size > 1) Queuelength += QStaff3[i].Size;
+                if (QStaff3[i].Size > 1) Queuelength += (QStaff3[i].Size-1);
             }
         }
         #endregion
@@ -420,6 +421,7 @@ namespace 离散事件模拟
 			{
 				QStaff3[i].EnQueue(cn);
 			}
+            
             Sum_Queue();//更新等待队列的长度
             
             int cur;
@@ -431,8 +433,8 @@ namespace 离散事件模拟
                 en.OccurTime = depT;//记录离开事件的发生时间，即顾客的离开事件
                 cur = First(en);
                 ev.Insert(cur, en);//插入到事件链表中
+                TheLeaveTimeOfFirstCustomer_Queue[en.Select, en.NType] = en.OccurTime;
             }
-
 			//下一客户到达事件，加入事件列表。
 			en.ArriveTime = arrT;
             en.OccurTime = en.ArriveTime;
@@ -475,19 +477,19 @@ namespace 离散事件模拟
 			int money = income[1]+income[2]+income[3];
 			text2.Text = money.ToString() + "元";
             Sum_Queue();
-            
+
             //如果当前已经出队的队列还有顾客等待，就开始服务等待顾客，将此顾客的离开事件加入时间链表
-            if((1==grade&&QStaff1[i].Size!=0)|| (2 == grade && QStaff2[i].Size != 0)|| (3 == grade && QStaff3[i].Size != 0))
+            if ((1 == grade && QStaff1[i].Size != 0) || (2 == grade && QStaff2[i].Size != 0) || (3 == grade && QStaff3[i].Size != 0))
             {
-                if(1==grade)
+                if (1 == grade)
                 {
                     temp = QStaff1[i].First();
                 }
-                else if(2==grade)
+                else if (2 == grade)
                 {
                     temp = QStaff2[i].First();
                 }
-                else if(3==grade)
+                else if (3 == grade)
                 {
                     temp = QStaff3[i].First();
                 }
@@ -500,7 +502,9 @@ namespace 离散事件模拟
                 en.Number = temp.Number;//记录此顾客的号码
                 int cur = First(en);//插入事件链表
                 ev.Insert(cur, en);
+                TheLeaveTimeOfFirstCustomer_Queue[grade, i] = en.OccurTime;
             }
+            else TheLeaveTimeOfFirstCustomer_Queue[grade, i] = 0;
             Update();
         }
 		#endregion
@@ -527,6 +531,7 @@ namespace 离散事件模拟
             {
                 FactEnd = StartTime.AddSeconds(CloseTime);//如果没有第一个顾客则记录实际关店时间
             }
+            
             text.Text = "";
 			onecustumer.Text = (Number_Customer[1]).ToString();
 			twocustumer.Text = (Number_Customer[2]).ToString();
@@ -534,7 +539,18 @@ namespace 离散事件模拟
 			Number_Staff[1] = Convert.ToInt32(text3.Text);
 			Number_Staff[2] = Convert.ToInt32(text4.Text);
 			Number_Staff[3] = Convert.ToInt32(text5.Text);
-			QStaff1 = new MyLinkQueue<CustomerNode>[Number_Staff[1]];
+            int maxn = 0;
+            for (int i = 1; i <= 3; i++)
+            {
+                if (Number_Staff[i] > maxn) maxn = Number_Staff[i];
+            }
+            TheLeaveTimeOfFirstCustomer_Queue = new int[4, maxn + 1];
+            for (int i = 1; i <= 3; i++)
+            {
+                for (int j = 1; j <= maxn; j++)
+                    TheLeaveTimeOfFirstCustomer_Queue[i, j] = 0;
+            }
+            QStaff1 = new MyLinkQueue<CustomerNode>[Number_Staff[1]];
 			for (int i = 0; i < Number_Staff[1]; i++)
 			{
 				QStaff1[i] = new MyLinkQueue<CustomerNode>();
@@ -555,40 +571,80 @@ namespace 离散事件模拟
 			int cur = 0;
 			if (Type == 1)
 			{
-				int len = QStaff1[0].Size;
-				for (int i = 1; i < Number_Staff[1]; i++)
+                int[] TheLastLeaveTime = new int[Number_Staff[1]];
+				for (int i = 0; i < Number_Staff[1]; i++)
 				{
-					if (len > QStaff1[i].Size)
-					{
-						len = QStaff1[i].Size;
-						cur = i;
-					}
+                    if (QStaff1[i].Size==0) TheLastLeaveTime[i]=0;
+                    else
+                    {
+                        TheLastLeaveTime[i] = TheLeaveTimeOfFirstCustomer_Queue[1, i];
+                        for(int j=1;j<QStaff1[i].Size;j++)
+                        {
+                            TheLastLeaveTime[i] += QStaff1[i][j].Duration;
+                        }
+                    }
 				}
+                int minn = 999999999;
+                for(int i=0;i<Number_Staff[1];i++)
+                {
+                    if(minn>TheLastLeaveTime[i])
+                    {
+                        cur = i;
+                        minn = TheLastLeaveTime[i];
+                    }
+                }
 			}
 			if (Type == 2)
 			{
-				int len = QStaff2[0].Size;
-				for (int i = 1; i < Number_Staff[2]; i++)
-				{
-					if (len > QStaff2[i].Size)
-					{
-						len = QStaff2[i].Size;
-						cur = i;
-					}
-				}
-			}
+                int[] TheLastLeaveTime = new int[Number_Staff[2]];
+                for (int i = 0; i < Number_Staff[2]; i++)
+                {
+                    if (QStaff2[i].Size == 0) TheLastLeaveTime[i] = 0;
+                    else
+                    {
+                        TheLastLeaveTime[i] = TheLeaveTimeOfFirstCustomer_Queue[2, i];
+                        for (int j = 1; j < QStaff2[i].Size; j++)
+                        {
+                            TheLastLeaveTime[i] += QStaff2[i][j].Duration;
+                        }
+                    }
+                }
+                int minn = 999999999;
+                for (int i = 0; i < Number_Staff[2]; i++)
+                {
+                    if (minn > TheLastLeaveTime[i])
+                    {
+                        cur = i;
+                        minn = TheLastLeaveTime[i];
+                    }
+                }
+            }
 			if (Type == 3)
 			{
-				int len = QStaff3[0].Size;
-				for (int i = 1; i < Number_Staff[3]; i++)
-				{
-					if (len > QStaff3[i].Size)
-					{
-						len = QStaff3[i].Size;
-						cur = i;
-					}
-				}
-			}
+                int[] TheLastLeaveTime = new int[Number_Staff[3]];
+                for (int i = 0; i < Number_Staff[3]; i++)
+                {
+                    if (QStaff3[i].Size == 0) TheLastLeaveTime[i] = 0;
+                    else
+                    {
+                        TheLastLeaveTime[i] = TheLeaveTimeOfFirstCustomer_Queue[3, i];
+                        for (int j = 1; j < QStaff3[i].Size; j++)
+                        {
+                            TheLastLeaveTime[i] += QStaff3[i][j].Duration;
+                        }
+                    }
+                }
+                int minn = 999999999;
+                
+                for (int i = 0; i < Number_Staff[3]; i++)
+                {
+                    if (minn > TheLastLeaveTime[i])
+                    {
+                        cur = i;
+                        minn = TheLastLeaveTime[i];
+                    }
+                }
+            }
 			return cur;
 		}
 		public void barber_simulation()

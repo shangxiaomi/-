@@ -84,9 +84,9 @@
             this.label6.Font = new System.Drawing.Font("黑体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label6.Location = new System.Drawing.Point(308, 101);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(183, 15);
+            this.label6.Size = new System.Drawing.Size(151, 15);
             this.label6.TabIndex = 5;
-            this.label6.Text = "离散事件驱动模型、链表";
+            this.label6.Text = "离散事件模型、链表";
             // 
             // label7
             // 
