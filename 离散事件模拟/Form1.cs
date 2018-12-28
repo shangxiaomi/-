@@ -131,10 +131,10 @@ namespace 离散事件模拟
             textBox18.Text = op.income[1].ToString()+"元";
             textBox19.Text = op.income[2].ToString()+"元";
             textBox20.Text = op.income[3].ToString()+"元";
-            textBox1.Text = op.FactEnd.Hour.ToString();
-            textBox2.Text = op.FactEnd.Minute.ToString();
-            textBox3.Text = op.FactEnd.Second.ToString();
-            textBox7.Text = (op.FactEnd - End).TotalSeconds.ToString()+"秒";
+            textBox1.Text = op.FactCloseTime.Hour.ToString();
+            textBox2.Text = op.FactCloseTime.Minute.ToString();
+            textBox3.Text = op.FactCloseTime.Second.ToString();
+            textBox7.Text = (op.FactCloseTime - End).TotalSeconds.ToString()+"秒";
             button2.Hide();
         }
         private void CloseDay()
@@ -290,13 +290,13 @@ namespace 离散事件模拟
 	{
         #region//相关字段
         int [,]TheLeaveTimeOfFirstCustomer_Queue;
-        public int Queuelength=0;//用于记录队列的长度累积
+        public int WaitQueueLength=0;//用于记录队列的长度累积
         public int Jiange = 100;//两个事件发生的间隔，在Form1中可以修改
-        public TextBox Queue_length = null;//用于显示平均队列长度
+        public TextBox Queue_length = null;//用于显示平均队列长度的Form1中的控件
 		public TextBox onecustumer = null;//用于显示相应级别的已经结账顾客数
 		public TextBox twocustumer = null;
 		public TextBox threecustumer = null;
-		public DateTime FactEnd;//实际关店时间（DateTime类）
+		public DateTime FactCloseTime;//实际关店时间（DateTime类）
 		public DateTime StartTime;//开店时间（DateTIme类） 
 		public TextBox text1 = null;//Form1中的textBox5文本框（在From中赋值）,用于显示平均逗留时间
 		public TextBox text2 = null;//Form1中的textBox6文本框（在From中赋值）,用于显示当前收入
@@ -356,7 +356,7 @@ namespace 离散事件模拟
 					else data.Rows[cnt].Cells[4].Value = "0";
 					cnt++;
 				}
-                Queue_length.Text=((float)Queuelength / (float)Number_event).ToString();//计算等待队列平均长度
+                Queue_length.Text=((float)WaitQueueLength / (float)Number_event).ToString();//计算等待队列平均长度
 
             }
 
@@ -367,15 +367,15 @@ namespace 离散事件模拟
         {
             for(int i=0;i<Number_Staff[1];i++)
             {
-                if(QStaff1[i].Size>1)Queuelength += (QStaff1[i].Size-1);
+                if(QStaff1[i].Size>1)WaitQueueLength += (QStaff1[i].Size-1);
             }
             for (int i = 0; i < Number_Staff[2]; i++)
             {
-                if (QStaff2[i].Size > 1) Queuelength += (QStaff2[i].Size-1);
+                if (QStaff2[i].Size > 1) WaitQueueLength += (QStaff2[i].Size-1);
             }
             for (int i = 0; i < Number_Staff[3]; i++)
             {
-                if (QStaff3[i].Size > 1) Queuelength += (QStaff3[i].Size-1);
+                if (QStaff3[i].Size > 1) WaitQueueLength += (QStaff3[i].Size-1);
             }
         }
         #endregion
@@ -510,7 +510,7 @@ namespace 离散事件模拟
 		#endregion
 		public void OpenDay()
 		{
-            Queuelength = 0;//等待队列长度初始化为0
+            WaitQueueLength = 0;//等待队列长度初始化为0
 			Number_event = 0;//事件数设为0
 			for (int i = 1; i < 4; i++)
 			{
@@ -529,7 +529,7 @@ namespace 离散事件模拟
             }
             else
             {
-                FactEnd = StartTime.AddSeconds(CloseTime);//如果没有第一个顾客则记录实际关店时间
+                FactCloseTime = StartTime.AddSeconds(CloseTime);//如果没有第一个顾客则记录实际关店时间
             }
             
             text.Text = "";
@@ -663,7 +663,7 @@ namespace 离散事件模拟
 				}
 				else
 				{
-					FactEnd = StartTime.AddSeconds(en.OccurTime);//记录实际关店时间
+					FactCloseTime = StartTime.AddSeconds(en.OccurTime);//记录实际关店时间
 					text.Text = "第" + (++Number_event).ToString() + "个事件 " + "客户离开  时间" + StartTime.AddSeconds(en.OccurTime).ToLongTimeString().ToString() + "第 " + en.Number + " 号顾客由 " + en.Select.ToString() + " 级别的第 " + (en.NType + 1).ToString() + " 位理发师完成服务 用时"+en.dur/60+"分钟\r\n" + text.Text;
 					//text.Text= "第" + (++Number_event).ToString() + "个事件 "+"客户离开  级别" +"编号" + en.Number + " " + en.Select.ToString() + "  此级别的第几位" + en.NType.ToString() + " " + StartTime.AddSeconds(en.OccurTime).ToLongTimeString().ToString() + "\r\n"+text.Text;                   
 					CustomerDepature();					
